@@ -1,0 +1,149 @@
+<html>
+<head>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<style>
+  .course-menu {
+    padding-top: 2%;
+    text-align: center;
+    position: absolute;
+    background-color: #e0e0e0;
+    width: 15%;
+    height: 100%;
+  }
+
+  .navbar {
+    margin-bottom: 0px;
+  }
+
+  .assign-page {
+    margin-top: 5%;
+    /* margin-left: 5%; */
+  }
+
+</style>
+</head>
+<body>
+  <nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="#">Sherlock Homework</a>
+      </div>
+      <ul class="nav navbar-nav">
+        <li class="active"><a href="#">Home</a></li>
+        <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Page 1 <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="#">Page 1-1</a></li>
+            <li><a href="#">Page 1-2</a></li>
+            <li><a href="#">Page 1-3</a></li>
+          </ul>
+        </li>
+        <li><a href="#">Page 2</a></li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="#"><span class="glyphicon glyphicon-user"></span> My Profile</a></li>
+        <li><a href="#"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Report</h4>
+        </div>
+        <div class="modal-body">
+        </div>
+      </div>
+    </div>
+  </div>
+
+<div class="course-menu">
+  <h4>Your Courses</h4>
+  <ul class="nav nav-pills nav-stacked">
+    <li class="nav-item">
+      <a class="nav-link" href="#">Managing Software Development</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="#">Web Development</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="#">Database Management System</a>
+    </li>
+  </ul>
+</div>
+  <div class="container">
+    <div class="assign-page">
+      <h3 id="page-title">Add Course</h3>
+      <div class="create-course-form">
+        <div class="form-group">
+          <label for="new-course-name">Title</label>
+          <input type="text" class="form-control" id="new-course-name">
+        </div>
+        <div class="form-group">
+          <label for="new-course-id">Course ID</label>
+          <input type="text" class="form-control" id="new-course-id">
+        </div>
+        <div class="form-group">
+          <label for="new-course-sem">Semester</label>
+          <select class="form-control" id="new-course-sem">
+            <option>Spring 2018</option>
+            <option>Fall 2018</option>
+            <option>Spring 2019</option>
+          </select>
+        </div>
+        <button class="btn btn-success">Submit</button>
+      </div>
+      <hr>
+
+      <div class="panel panel-default">
+        <div class="panel-heading">
+            <h4>Courses</h4>
+        </div>
+        <div class="panel-body">
+          <table class="table table-hover">
+            <thead>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Semester</th>
+              <th></th>
+            </thead>
+            <tbody id="assignment-info">
+              <tr>
+                <td>CS5500</td>
+                <td>Managing Software Development</td>
+                <td>Spring 2018</td>
+                <td>
+                  <button class="btn btn-primary" data-id="cs5500">Edit</button>
+                  <button class="btn btn-danger" data-id="cs5500">Delete</button>
+                </td>
+              </tr>
+              <tr>
+                <td>CS5610</td>
+                <td>Web Development</td>
+                <td>Spring 2018</td>
+                <td>
+                  <button class="btn btn-primary" data-id="cs5610">Edit</button>
+                  <button class="btn btn-danger" data-id="cs5610">Delete</button>
+                </td>
+              </tr>
+              <tr>
+                <td>CS5100</td>
+                <td>Programming Design Paradigm</td>
+                <td>Fall 2018</td>
+                <td>
+                  <button class="btn btn-primary" data-id="cs5100">Edit</button>
+                  <button class="btn btn-danger" data-id="cs5100">Delete</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,182 @@
+
+<nav class="navbar navbar-inverse">
+	<div class="container-fluid">
+		<div class="navbar-header">
+			<a class="navbar-brand" href="#">Sherl<i class="fas fa-search logo-icon-nav"></i>ck</a>
+		</div>
+		<ul class="nav navbar-nav">
+			<li class="active"><a href="#/instructor/">Home</a></li>
+		</ul>
+		<ul class="nav navbar-nav navbar-right">
+			<li><a href="#"><span class="glyphicon glyphicon-user"></span>
+					{{current_user_name}}</a></li>
+			<li><a href="#" ng-click="model.logout()"><span
+					class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+		</ul>
+	</div>
+</nav>
+
+<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog"
+	aria-labelledby="myLargeModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">Report</h4>
+			</div>
+			<div class="modal-body">
+				<div class="container">
+					<div class="row">
+						<div clas="col">
+							<h3 style="margin-bottom:10px;"><b>Plagiarism Score: <span class="label label-danger">{{reportPc}}%</span></b></h3>
+							<h4>Regression Score: <span class="label label-warning">{{reportRegScore}}%</span></h4>
+							<h5>Lines Copied: {{reportLinesCopied}}</h5>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-6">
+							<p>{{reportStudent1}}</p>
+							<iframe ng-src="{{trustSrc(reportFirstSide)}}" width=90% height=70%></iframe>
+						</div>
+						<div class="col-md-6">
+							<p>{{reportStudent2}}</p>
+							<iframe ng-src="{{trustSrc(reportSecondSide)}}"width=90% height=70%></iframe>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="container clearfix">
+	<div class="course-menu column">
+		<li class="menu-title"><i class="glyphicon glyphicon-education"></i> Courses</li>
+		<ul ng-repeat="x in courselist" class="nav nav-pills nav-stacked">
+			<li ng-if="x == selected_course" class="nav-item active">
+				<a data-id="{{x.courseId}}"	class="nav-link" href="/#/instructor/course/{{x.courseId}}">{{x.courseName}}</a>
+			</li>
+			<li ng-if="x != selected_course" class="nav-item">
+				<a data-id="{{x.courseId}}"	class="nav-link" href="/#/instructor/course/{{x.courseId}}">{{x.courseName}}</a>
+			</li>			
+		</ul>
+		<p ng-if="courselist.length == 0">No courses. Try adding a new.</p>
+		<hr>
+		<div class="sidebar-btns">
+			<a class="side-btn" ng-click="model.createCourse()">	
+				<button class="btn btn-default menu-btn">
+						<i class="far fa-plus-square"></i> Add Courses
+				</button>
+			</a>
+		</div>
+	</div>
+	
+	<div class="assign-page column">
+	
+		
+		<h4>{{selected_course.courseName}}</h4>
+		<ol class="breadcrumb">
+  			<li><a href="/#/instructor">Home</a></li>
+  			<li><a href="/#/instructor">Courses</a></li>
+  			<li class="active">{{selected_course.courseName}}</li>
+		</ol>
+	
+		<hr>
+	
+		<div class="row">
+			<div class="col-md-6">
+				<div ng-if="assignmentlist.length > 0" class="panel panel-default">
+					<div class="panel-heading">
+						<div class="row">
+							<div class="col-md-6">
+								<h4><i class="fas fa-book"></i> Assignments</h4>
+							</div>
+							<div class="col-md-6">
+								<a href> <a
+									href="/#/instructor/newAssignment/{{model.thisCourse.courseId}}"
+									class="btn btn-default btn-sm"
+									style="float: right; margin-top: 5px;" id="new-assignment">
+										<span class="glyphicon glyphicon-plus"></span> New Assignment
+								</a>
+								</a>
+							</div>
+						</div>
+					</div>
+					<div class="panel-body">
+						<table class="table table-hover">
+							<thead>
+								<th>No.</th>
+								<th>Name</th>
+								<th></th>
+							</thead>
+							<tbody id="assignment-info">
+								<tr ng-repeat="x in assignmentlist" ng-class="{active: x == selected_assign}">
+									<td>{{x.assignmentId}}</td>
+									<td><button class="btn btn-link" ng-click="model.loadReports(x)">{{x.assignmentName}}</button></td>
+									<td>
+										<a href="/#/instructor/assignment/{{x.assignmentId}}"><button class="btn btn-default btn-sm">Submissions</button></a>
+										<button class="btn btn-primary btn-sm" data-id={{x.assignmentId}}
+											val={{x.assignmentId]} ng-click="model.editAssignment(x.assignmentId)">Edit</button>
+										<button class="btn btn-danger btn-sm" data-id={{x.assignmentId}}
+											ng-click="model.deleteAssignment(x)">Delete</button>
+									</td>
+								</tr>
+								
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+			<span class="editrow" child-scope>
+      <span ng-hide="editing">
+        {{user.first}} <span ng-click="editing = true"><i class="icon-pencil"></i></span>
+  </span>
+  <span ng-show="editing">
+        <input type="text" ng-model="user.first">
+        <span ng-click="editing = false"><i class="icon-ok"></i></span>
+  </span>
+  </span>
+			<div class="col-md-6">
+				<div ng-if="allReportList.length > 0" class="panel panel-default">
+					<div class="panel-heading">
+						<h4><i class="fas fa-chart-bar"></i> Reports for {{assignName}}</h4>
+					</div>
+					<div class="panel-body">
+						<form class="form-inline" style="width: 90%; margin-left:auto; margin-right:auto;">
+							<input type="number" class="form-control" ng-model="model.thresholdVal" min="0" max="100" value="0" style="width:70%;"/>
+							<button ng-click="model.setThreshold(model.thresholdVal)" class="btn btn-primary">Set Threshold</button>
+						</form>
+						<div class="alert alert-info" ng-if="threshList.length < allReportList.length">
+							<p>One or more reports hidden due to threshold</p>
+						</div>
+						<table class="table table-hover" ng-if="threshList.length > 0">
+							<thead>
+								<th>Student 1</th>
+								<th>Student 2</th>
+								<th>Plagiarism Score</th>
+							</thead>
+							<tbody id="student-info">
+								<tr ng-repeat="x in threshList">
+									<td>{{userList[x.mossId].user1Id.emailId}}</td>
+									<td>{{userList[x.mossId].user2Id.emailId}}</td>
+									<td><span class="label label-danger">{{x.plagiarismScore}}%</span>
+										<button type="button" class="btn btn-default btn-xs rep-btn"
+											data-rep="c1-as1-rep1" data-toggle="modal"
+											ng-click="model.viewReport(x)"
+											data-target=".bd-example-modal-lg">View</button></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+				
+				<div ng-if="allReportList.length <= 0" class="panel panel-success">
+					<div class="panel-body">
+						<h5>No Plagiarism Reports For {{assignName}} Assignment.</h5>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</div>
+</div>

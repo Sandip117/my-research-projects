@@ -1,0 +1,575 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD>
+ <TITLE>Competitor1.java</TITLE>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <script type="text/javascript">
+  <!--
+   function ZweiFrames(URL1,F1,URL2,F2)
+   {
+    parent.frames[F1].location.href=URL1;
+    parent.frames[F2].location.href=URL2;
+   }
+  //-->
+  </script>
+</HEAD>
+<BODY BGCOLOR="#ffffff" style="margin-left:25">
+<HR>
+<H3><CENTER>Competitor1.java</CENTER></H3><HR>
+<PRE>
+
+// Constructor template for Competitor1:
+//     new Competitor1 (String s)
+//
+// Interpretation: the competitor represents an individual or team
+// Note:  In Java, you cannot assume a List is mutable, because all
+// of the List operations that change the state of a List are optional.
+// Mutation of a Java list is allowed only if a precondition or other
+// invariant says the list is mutable and you are allowed to change it.
+import java.util.*;
+import static java.util.Arrays.asList;
+
+class Competitor1 implements Competitor {
+
+    // Local variables defined here
+    String s; // The name of the competitor(any string will do).
+
+    // the Java constructor
+    // EXAMPLES : Competitor c=new Competitor1(&quot;Sandip&quot;);
+    Competitor1(String s) {
+        this.s = s;
+    }
+
+    // Public Methods
+    // returns the name of this competitor
+    public String name() {
+        return s;
+    }
+
+    // GIVEN: another competitor and a list of outcomes
+    // RETURNS: true iff one or more of the outcomes indicates this
+    //          competitor has defeated or tied the given competitor
+    // EXAMPLES : see tests below
+    public boolean hasDefeated(Competitor c2, List&lt;Outcome&gt; outcomes) {
+        Boolean flag = false; // Local variable to store the boolean value.
+        for (Outcome o : outcomes) {
+            if (o.isTie()) {
+                if (((this.name() == o.first().name()) || (this.name()
+                        == o.second().name()))
+                        &amp;&amp; ((c2.name() == o.first().name()) || (c2.name()
+                        == o.second().name()))) {
+                    flag = true;
+                }
+            } else {
+                if ((this.name() == o.winner().name()) &amp;&amp; (c2.name()
+                        == o.loser().name())) {
+                    flag = true;
+                }
+            }
+        }
+        return flag;
+    }
+
+    // GIVEN: a list of outcomes
+    // RETURNS: a list of the names of all competitors mentioned by
+    //          the outcomes that are outranked by this competitor,
+    //          without duplicates, in alphabetical order
+    // EXAMPLES : see tests below
+    public List&lt;String&gt; outranks(List&lt;Outcome&gt; outcomes) {
+        return genOutFun(outcomes, true);
+    }
+
+    // GIVEN: a list of outcomes
+    // RETURNS: a list of the names of all competitors mentioned by
+    //          the outcomes that outrank this competitor,
+    //          without duplicates, in alphabetical order
+    // EXAMPLES : see tests below
+    public List&lt;String&gt; outrankedBy(List&lt;Outcome&gt; outcomes) {
+        return genOutFun(outcomes, false);
+    }
+
+    // GIVEN: a list of outcomes
+    // RETURNS: a list of the names of all competitors mentioned by
+    //          one or more of the outcomes, without repetitions, with
+    //          the name of competitor A coming before the name of
+    //          competitor B in the list if and only if the power-ranking
+    //          of A is higher than the power ranking of B.
+    // EXAMPLES : see tests below
+    public List&lt;String&gt; powerRanking(List&lt;Outcome&gt; outcomes) {
+        List&lt;Competitor&gt; compList = listOfCompetitors(outcomes); // list of all
+        // competitors
+        Competitor[] clist = compList.toArray(new Competitor[compList.size()]);
+        insertionSort(clist, outcomes);
+        compList = asList(clist);
+        List&lt;String&gt; slist = new ArrayList&lt;String&gt;(); // list of names of all
+        // competitors sorted in decreasing order of power ranking
+        for (Competitor c : compList) {
+            slist.add(c.name());
+        }
+        return slist;
+    }
+
+    // private helper methods
+    // GIVEN : a list of outcomes
+    // RETURNS : a list of all competitors present in the outcomes without any
+    //           repeatition.
+    // EXAMPLES : listOfCompetitor(outcomeList)=&gt;asList(&quot;CompName1&quot;,&quot;CompName2&quot;..)
+    private List&lt;Competitor&gt; listOfCompetitors(List&lt;Outcome&gt; outcomes) {
+        List&lt;Competitor&gt; slist = new ArrayList&lt;Competitor&gt;(); // list of 
+        // competitors
+        Set&lt;Competitor&gt; clist = new HashSet&lt;Competitor&gt;();
+        for (Outcome o : outcomes) {
+            if (o.isTie()) {
+                clist.add(o.first());
+                clist.add(o.second());
+            } else {
+                clist.add(o.winner());
+                clist.add(o.loser());
+            }
+        }
+        slist.addAll(clist);
+        return slist;
+    }
+
+    // GIVEN : a list of outcomes and a boolean flag
+    // WHERE : the fl is a boolean flag whose value decides the
+    //         outcome of the function:
+    //         if fl=true, returns list of competitor names outranked by 
+    //         this competitor
+    //         if fl=false, returns list of competitor names that outrank 
+    //         this competitor
+    // RETURNS : a list of name of all the competitors that either
+    //           outrank or are outranked by this competitor.
+    // EXAMPLES : implemented in tests for outranks() &amp; outrankedBy()
+    // STRATEGY : use BFS algorithm
+    private List&lt;String&gt; genOutFun(List&lt;Outcome&gt; outcomes, boolean fl) {
+        // local variable clist contains a list of names of competitors directly
+        // defeated by/ defeated this competitor.
+        List&lt;String&gt; uclist = compInOutcomeList(this, outcomes, fl);
+        // local variable clist contains a list of name of all competitors 
+        // outrank/ outranked by this competitor and is initialized as empty.
+        List&lt;String&gt; clist = new ArrayList&lt;String&gt;();
+        // HALTING MEASURE : the size() of uclist
+        while (uclist.size() &gt; 0) {
+            String firstComp = uclist.get(0);
+            Competitor c = new Competitor1(firstComp);
+            if (clist.contains(firstComp)) {
+                uclist.remove(firstComp);
+            } else {
+
+                uclist.addAll(compInOutcomeList(c, outcomes, fl));
+                clist.add(firstComp);
+            }
+        }
+        Collections.sort(clist);
+        return clist;
+    }
+
+    // GIVEN : two competitors c1, c2 and a list of outcomes
+    // RETURNS : true iff c1 has greater power ranking than c2
+    // STRATEGY : divide into cases whether c1 has higher power ranking than c2
+    // EXAMPLES : implemented in tests for powerRanking()
+    private Boolean powRankGreat(Competitor c1, Competitor c2,
+            List&lt;Outcome&gt; outcomes) {
+        double nlp1 = nlPerc(c1, outcomes); // non losing percentage of c1
+        double nlp2 = nlPerc(c2, outcomes); // non losing percentage of c2
+        int or1 = c1.outranks(outcomes).size(); // number of outranks of c1
+        int or2 = c2.outranks(outcomes).size(); // number of outranks of c2
+        int orb1 = c1.outrankedBy(outcomes).size(); // number of outranked-by of c1
+        int orb2 = c2.outrankedBy(outcomes).size(); // number of outranked-by of c2
+        if (orb1 &lt; orb2) {
+            return true;
+        } else if ((orb1 == orb2) &amp;&amp; (or1 &gt; or2)) {
+            return true;
+        } else if ((orb1 == orb2) &amp;&amp; (or1 == or2) &amp;&amp; (nlp1 &gt; nlp2)) {
+	 return true;
+	}else if ((orb1 == orb2) &amp;&amp; (or1 == or2) &amp;&amp; (nlp1 == nlp2)
+	 &amp;&amp; ((c1.name().compareTo(c2.name())) &lt; 0)) {
+	  return true;
+	}else {
+            return false;
+        }
+    }
+
+    // GIVEN : a list of competitors and a list of outcomes
+    // EFFECT : sorts the given list of competitors in decreasing order
+    //          of their power ranking
+    // STRATEGY : use insertion sort.
+    // EXAMPLES : implemented in tests for powerRanking()
+    void insertionSort(Competitor[] competitors, List&lt;Outcome&gt; outcomes) {
+        int i, j; // counter variables
+        Competitor key = null; // initial key
+        for (i = 1; i &lt; competitors.length; i++) {
+            key = competitors[i];
+            j = i - 1;
+            while (j &gt;= 0 &amp;&amp; !powRankGreat((Competitor) competitors[j], key,
+                    outcomes)) {
+                competitors[j + 1] = competitors[j];
+                j = j - 1;
+            }
+            competitors[j + 1] = key;
+        }
+    }
+
+    // GIVEN : a competitor, a list of outcomes and a boolean flag fl
+    // WHERE : fl decides what this method should return.
+    //         if fl=true, returns list of competitor names defeated by c
+    //         if fl=false, returns list of competitor names that defeated c
+    // RETURNS : a list of competitors that defeated/are  defeated by the given 
+    //           competitor c
+    private List&lt;String&gt; compInOutcomeList(Competitor c, List&lt;Outcome&gt; outcomes,
+            boolean fl) {
+        List&lt;String&gt; slist = new ArrayList&lt;String&gt;(); // list of competitors 
+        // either defeated or defeated by c
+        for (Outcome o : outcomes) {
+            if (o.isTie()) {
+                if (c.name() == o.first().name()) {
+                    slist.add(o.second().name());
+                } else if (c.name() == o.second().name()) {
+                    slist.add(o.first().name());
+                }
+
+            } else {
+                if (fl) {
+                    if (c.name() == o.winner().name()) {
+                        slist.add(o.loser().name());
+                    }
+                } else {
+                    if (c.name() == o.loser().name()) {
+                        slist.add(o.winner().name());
+                    }
+                }
+
+            }
+        }
+        return slist;
+    }
+
+    // GIVEN : a competitor, a list of outcomes and a boolean flag fl
+    // WHERE : fl decides the outcome of the method
+    //         if fl=true, returns the no. of matches played by the competitor
+    //         if fl=false, returns the no. of matches won by the competitor
+    // RETURNS : the number of outcomes in which the given competitor c was
+    //           present
+    private int genCountFun(Competitor c, List&lt;Outcome&gt; outcomes, boolean fl) {
+        int n = 0; // the counter of the no. of matches present/won
+        for (Outcome o : outcomes) {
+            if (o.isTie()) {
+                if ((c.equals(o.first())) || (c.equals(o.second()))) {
+                    n++;
+                }
+            } else {
+                if (fl) {
+                    if ((c.equals(o.winner())) || (c.equals(o.loser()))) {
+                        n++;;
+                    }
+                } else {
+                    if ((c.equals(o.winner()))) {
+                        n++;;
+                    }
+                }
+            }
+
+        }
+        return n;
+    }
+
+    // GIVEN : a competitor and a list of outcomes
+    // RETURNS : the non losing percentage of the given competitor c
+    private double nlPerc(Competitor c, List&lt;Outcome&gt; outcomes) {
+        double p = 0.0; // non losing percentage of the given competitor
+        p = (genCountFun(c, outcomes, false) / genCountFun(c, outcomes, true));
+        return p;
+    }
+
+    // a main method for unit testing
+    public static void main(String[] args) {
+
+        Competitor1tests.main(args);
+    }
+}
+
+// Unit tests for Competitor1
+class Competitor1tests {
+
+<A NAME="2"></A>    public static void main(String[] args) {
+
+        // Competitor variables
+<FONT color="#77bfc7"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match2-0.html#2',2,'match2-top.html#2',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>        Competitor c1 = new Competitor1(&quot;A&quot;);
+<A NAME="4"></A>        Competitor c2 = new Competitor1(&quot;B&quot;);
+        Competitor c3 = new Competitor1(&quot;C&quot;);
+        Competitor c4 = new Competitor1(&quot;D&quot;);</B></FONT>
+<FONT color="#151b8d"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match2-0.html#4',2,'match2-top.html#4',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>        Competitor c5 = new Competitor1(&quot;E&quot;);
+<A NAME="0"></A>        Competitor c6 = new Competitor1(&quot;F&quot;);
+        Competitor c7 = new Competitor1(&quot;G&quot;);
+        Competitor c8 = new Competitor1(&quot;H&quot;);</B></FONT>
+<A NAME="1"></A><FONT color="#0000ff"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match2-0.html#0',2,'match2-top.html#0',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>        Competitor c9 = new Competitor1(&quot;I&quot;);
+        Competitor c10 = new Competitor1(&quot;J&quot;);
+        Competitor c11 = new Competitor1(&quot;K&quot;);</B></FONT>
+<A NAME="3"></A><FONT color="#f63526"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match2-0.html#1',2,'match2-top.html#1',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>        Competitor c12 = new Competitor1(&quot;L&quot;);
+        Competitor c13 = new Competitor1(&quot;M&quot;);
+        Competitor c14 = new Competitor1(&quot;N&quot;);</B></FONT>
+<A NAME="5"></A><FONT color="#6cc417"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match2-0.html#3',2,'match2-top.html#3',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>        Competitor c15 = new Competitor1(&quot;O&quot;);
+        Competitor c16 = new Competitor1(&quot;P&quot;);
+        Competitor A = new Competitor1(&quot;Alex&quot;);</B></FONT>
+<FONT color="#c8c2a7"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match2-0.html#5',2,'match2-top.html#5',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>        Competitor B = new Competitor1(&quot;Ben&quot;);
+        Competitor C = new Competitor1(&quot;Cathy&quot;);
+        Competitor D = new Competitor1(&quot;Duke&quot;);</B></FONT>
+        Competitor F = new Competitor1(&quot;Frank&quot;);
+
+        // Outcome variables
+        Outcome d1 = new Defeat1(c1, c2);
+        Outcome d2 = new Defeat1(c2, c3);
+        Outcome d3 = new Defeat1(c3, c4);
+        Outcome d4 = new Defeat1(c4, c5);
+        Outcome d5 = new Defeat1(c5, c1);
+        Outcome t1 = new Tie1(c1, c2);
+        Outcome t2 = new Tie1(c2, c3);
+        Outcome t3 = new Tie1(c3, c4);
+        Outcome t4 = new Tie1(c4, c5);
+        Outcome t5 = new Tie1(c6, c7);
+        Outcome defBC = new Defeat1(c2, c3);
+        Outcome defCB = new Defeat1(c3, c2);
+        Outcome tieAB = new Tie1(c1, c2);
+        Outcome tieAC = new Tie1(c1, c3);
+        Outcome tieAE = new Tie1(c1, c5);
+        Outcome defCA = new Defeat1(c3, c1);
+        Outcome defFB = new Defeat1(c6, c2);
+        Outcome defAD = new Defeat1(c1, c4);
+        Outcome defAE = new Defeat1(c1, c5);
+        Outcome defCF = new Defeat1(c3, c6);
+        Outcome tieDB = new Tie1(c4, c2);
+        Outcome defFE = new Defeat1(c6, c5);
+        Outcome defCE = new Defeat1(c3, c5);
+        Outcome defDC = new Defeat1(c4, c3);
+        Outcome defBA = new Defeat1(c2, c1);
+        Outcome defAC = new Defeat1(c1, c3);
+        Outcome tieBC = new Tie1(c2, c3);
+        Outcome tieBD = new Tie1(c2, c4);
+        Outcome tieCE = new Tie1(c3, c5);
+        Outcome defAlB = new Defeat1(A, B);
+        Outcome defAlC = new Defeat1(A, C);
+        Outcome defDuC = new Defeat1(D, C);
+        Outcome tieAlD = new Tie1(A, D);
+        Outcome tieFrB = new Tie1(F, B);
+        Outcome defBeA = new Defeat1(B, A);
+        Outcome tieEH = new Tie1(c5, c8);
+        Outcome tieFI = new Tie1(c6, c9);
+        Outcome tieGK = new Tie1(c7, c11);
+        Outcome tieHL = new Tie1(c8, c12);
+        Outcome tieIM = new Tie1(c9, c13);
+        Outcome tieJN = new Tie1(c10, c14);
+        Outcome tieKO = new Tie1(c11, c15);
+        Outcome tieLP = new Tie1(c12, c16);
+        Outcome tieMK = new Tie1(c13, c11);
+        Outcome tieNL = new Tie1(c14, c12);
+        Outcome defOA = new Defeat1(c15, c1);
+        Outcome tiePB = new Tie1(c16, c2);
+        Outcome tieJP = new Tie1(c10, c16);
+
+        // Outcome list variables
+        List&lt;Outcome&gt; olist = new ArrayList&lt;Outcome&gt;();
+        olist.add(d1);
+        olist.add(d2);
+        olist.add(t1);
+        olist.add(t2);
+        olist.add(d3);
+        olist.add(d4);
+        olist.add(d5);
+        olist.add(t3);
+
+        List&lt;Outcome&gt; test1 = new ArrayList&lt;Outcome&gt;();
+        test1.add(defBC);
+        test1.add(defCB);
+        test1.add(tieAB);
+        test1.add(tieAC);
+        test1.add(defCA);
+
+        List&lt;Outcome&gt; test2 = new ArrayList&lt;Outcome&gt;();
+        test2.add(tieAB);
+        test2.add(t2);
+
+        List&lt;Outcome&gt; olist2 = new ArrayList&lt;Outcome&gt;();
+        olist2.add(defAD);
+        olist2.add(defAE);
+        olist2.add(defCB);
+        olist2.add(defCF);
+        olist2.add(tieDB);
+        olist2.add(defFE);
+
+        List&lt;Outcome&gt; olist3 = new ArrayList&lt;Outcome&gt;();
+        olist3.add(defCE);
+        olist3.add(tieDB);
+        olist3.add(defDC);
+
+        List&lt;Outcome&gt; olist4 = new ArrayList&lt;Outcome&gt;();
+        olist4.add(tieAE);
+        olist4.add(defCB);
+        olist4.add(defBA);
+        olist4.add(defAC);
+        olist4.add(tieBC);
+
+        List&lt;Outcome&gt; olist5 = new ArrayList&lt;Outcome&gt;();
+        olist5.add(defCB);
+        olist5.add(defBA);
+        olist5.add(defAC);
+        olist5.add(tieBC);
+
+        List&lt;Outcome&gt; olist6 = new ArrayList&lt;Outcome&gt;();
+        olist6.add(defCB);
+        olist6.add(defAC);
+        olist6.add(tieBD);
+
+        List&lt;Outcome&gt; olist7 = new ArrayList&lt;Outcome&gt;();
+        olist7.add(d1);
+        olist7.add(defBC);
+        olist7.add(d3);
+        olist7.add(d4);
+        olist7.add(tieAE);
+
+        List&lt;Outcome&gt; olist8 = new ArrayList&lt;Outcome&gt;();
+        olist8.add(d1);
+        olist8.add(defBC);
+        olist8.add(d3);
+        olist8.add(d4);
+        olist8.add(tieCE);
+
+        List&lt;Outcome&gt; olist9 = new ArrayList&lt;Outcome&gt;();
+        olist9.add(d1);
+        olist9.add(defBC);
+        olist9.add(d3);
+        olist9.add(d4);
+        olist9.add(tieCE);
+
+        List&lt;Outcome&gt; olist10 = new ArrayList&lt;Outcome&gt;();
+        olist10.add(defAD);
+        olist10.add(defAE);
+        olist10.add(defCB);
+        olist10.add(defCF);
+        olist10.add(tieDB);
+        olist10.add(defFE);
+
+        List&lt;Outcome&gt; olist11 = new ArrayList&lt;Outcome&gt;();
+        olist11.add(d1);
+        olist11.add(d2);
+        olist11.add(d3);
+
+        List&lt;Outcome&gt; olist12 = new ArrayList&lt;Outcome&gt;();
+        olist12.add(defCF);
+        olist12.add(defFB);
+        olist12.add(defAC);
+
+        List&lt;Outcome&gt; olist13 = new ArrayList&lt;Outcome&gt;();
+        olist13.add(defAlB);
+        olist13.add(defAlC);
+        olist13.add(defDuC);
+        olist13.add(tieAlD);
+        olist13.add(tieFrB);
+        olist13.add(defBeA);
+        
+        List&lt;Outcome&gt; olist14 = new ArrayList&lt;Outcome&gt;();
+        olist14.add(t1);
+        olist14.add(t2);
+        olist14.add(t3);
+        olist14.add(t4);
+        olist14.add(tieEH);
+        olist14.add(tieFI);
+        olist14.add(tieGK);
+        olist14.add(tieHL);
+        olist14.add(tieIM);
+        olist14.add(tieJN);
+        olist14.add(tieKO);
+        olist14.add(tieLP);
+        olist14.add(tieMK);
+        olist14.add(tieNL);
+        olist14.add(defOA);
+        olist14.add(tiePB);
+        olist14.add(tieCE);
+        olist14.add(tieJP);
+
+	List&lt;Outcome&gt; olist15 = new ArrayList&lt;Outcome&gt;();
+	olist15.add(defBC);
+	olist15.add(defCB);
+	olist15.add(t1);
+	olist15.add(tieAC);
+	olist15.add(defCA);
+
+	System.out.println(c1.powerRanking(olist15));
+
+        // Tests for hasDefeated()
+        checkTrue(c1.hasDefeated(c2, olist) == true);
+        checkTrue(c2.hasDefeated(c3, olist) == true);
+        checkTrue(c5.hasDefeated(c1, olist) == true);
+        checkTrue(c2.hasDefeated(c1, olist) == true);
+        checkTrue(c4.hasDefeated(c3, olist) == true);
+        checkFalse(c1.hasDefeated(c1, olist) == false);
+
+        // Tests for outranks()
+        checkTrue(c1.outranks(test1).equals(asList(&quot;A&quot;, &quot;B&quot;, &quot;C&quot;)));
+        checkTrue(c1.outranks(olist5).equals(asList(&quot;A&quot;, &quot;B&quot;, &quot;C&quot;)));
+        checkTrue(c1.outranks(olist6).equals(asList(&quot;B&quot;, &quot;C&quot;, &quot;D&quot;)));
+        checkTrue(c1.outranks(olist7).equals(asList(&quot;A&quot;, &quot;B&quot;, &quot;C&quot;, &quot;D&quot;, &quot;E&quot;)));
+
+        // Tests for outrankedBy()
+        checkTrue(c1.outrankedBy(test1).equals(asList(&quot;A&quot;, &quot;B&quot;, &quot;C&quot;)));
+        checkTrue(c3.outrankedBy(olist8).equals(asList(&quot;A&quot;, &quot;B&quot;, &quot;C&quot;, &quot;D&quot;,
+                &quot;E&quot;)));
+        checkTrue(c1.outrankedBy(olist8).equals(asList()));
+
+        // Tests for powerRanking()
+        checkTrue(c1.powerRanking(olist2).equals(asList(&quot;C&quot;, &quot;A&quot;, &quot;F&quot;, &quot;E&quot;, &quot;B&quot;,
+                &quot;D&quot;)));
+        checkTrue(c1.powerRanking(olist3).equals(asList(&quot;B&quot;, &quot;D&quot;, &quot;C&quot;, &quot;E&quot;)));
+        checkTrue(c1.powerRanking(olist4).equals(asList(&quot;E&quot;, &quot;A&quot;, &quot;B&quot;, &quot;C&quot;)));
+        checkTrue(c1.powerRanking(olist9).equals(asList(&quot;A&quot;, &quot;B&quot;, &quot;C&quot;, &quot;D&quot;,
+                &quot;E&quot;)));
+        checkTrue(c1.powerRanking(olist10).equals(asList(&quot;C&quot;, &quot;A&quot;, &quot;F&quot;, &quot;E&quot;, &quot;B&quot;,
+                &quot;D&quot;)));
+        checkTrue(c1.powerRanking(olist11).equals(asList(&quot;A&quot;, &quot;B&quot;, &quot;C&quot;, &quot;D&quot;)));
+        checkTrue(c1.powerRanking(olist12).equals(asList(&quot;A&quot;, &quot;C&quot;, &quot;F&quot;, &quot;B&quot;)));
+        checkTrue(c1.powerRanking(olist13).equals(asList(&quot;Duke&quot;, &quot;Frank&quot;, &quot;Alex&quot;,
+                &quot;Ben&quot;, &quot;Cathy&quot;)));
+        checkTrue(c1.powerRanking(olist14).equals(asList(&quot;F&quot;, &quot;G&quot;, &quot;I&quot;, &quot;K&quot;,
+                &quot;M&quot;, &quot;O&quot;, &quot;B&quot;, &quot;C&quot;, &quot;D&quot;, &quot;E&quot;, &quot;H&quot;, &quot;J&quot;, &quot;L&quot;, &quot;N&quot;, &quot;P&quot;, &quot;A&quot;)));
+
+        summarize();
+    }
+
+////////////////////////////////////////////////////////////////
+    private static int testsPassed = 0;
+    private static int testsFailed = 0;
+
+    private static final String FAILED
+            = &quot;    TEST FAILED: &quot;;
+
+    static void checkTrue(boolean result) {
+        checkTrue(result, &quot;anonymous&quot;);
+    }
+
+    static void checkTrue(boolean result, String name) {
+        if (result) {
+            testsPassed = testsPassed + 1;
+        } else {
+            testsFailed = testsFailed + 1;
+            System.err.println(FAILED + name);
+        }
+    }
+
+    static void checkFalse(boolean result) {
+        checkFalse(result, &quot;anonymous&quot;);
+    }
+
+    static void checkFalse(boolean result, String name) {
+        checkTrue(!result, name);
+    }
+
+    static void summarize() {
+        System.err.println(&quot;Passed &quot; + testsPassed + &quot; tests&quot;);
+        if (testsFailed &gt; 0) {
+            System.err.println(&quot;Failed &quot; + testsFailed + &quot; tests&quot;);
+        }
+    }
+}
+</PRE>
+</BODY>
+</HTML>

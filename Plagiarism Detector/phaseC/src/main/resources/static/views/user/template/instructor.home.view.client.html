@@ -1,0 +1,199 @@
+
+<nav class="navbar navbar-inverse">
+	<div class="container-fluid">
+		<div class="navbar-header">
+			<a class="navbar-brand" href="/#/instructor/">Sherl<i class="fas fa-search logo-icon-nav"></i>ck</a>
+		</div>
+		<ul class="nav navbar-nav">
+			<li class="active"><a href="#/instructor/">Home</a></li>
+		</ul>
+		<ul class="nav navbar-nav navbar-right">
+			<li><a href="#"><span class="glyphicon glyphicon-user"></span>
+					{{current_user_name}}</a></li>
+			<li><a href="#" ng-click="model.logout()"><span
+					class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+		</ul>
+	</div>
+</nav>
+
+<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog"
+	aria-labelledby="myLargeModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">Report</h4>
+			</div>
+			<div class="modal-body">
+				<div class="container">
+					<div class="row">
+						<div clas="col">
+							<h3 style="margin-bottom:10px;"><b>Plagiarism Score: <span class="label label-danger">{{reportPc}}%</span></b></h3>
+							<h4>Regression Score: <span class="label label-warning">{{reportRegScore}}%</span></h4>
+							<h5>Lines Copied: {{reportLinesCopied}}</h5>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-6">
+							<p>{{reportStudent1}}</p>
+							<iframe ng-src="{{trustSrc(reportFirstSide)}}" width=90% height=70%></iframe>
+						</div>
+						<div class="col-md-6">
+							<p>{{reportStudent2}}</p>
+							<iframe ng-src="{{trustSrc(reportSecondSide)}}"width=90% height=70%></iframe>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="container clearfix">
+	<div class="course-menu column">
+		<li class="menu-title"><i class="glyphicon glyphicon-education"></i> Courses</li>
+		<ul ng-repeat="x in courselist" class="nav nav-pills nav-stacked">
+			<li ng-if="x == selected_course" class="nav-item active">
+				<a data-id="{{x.courseId}}"	class="nav-link" href="/#/instructor/course/{{x.courseId}}">{{x.courseName}}</a>
+			</li>
+			<li ng-if="x != selected_course" class="nav-item">
+				<a data-id="{{x.courseId}}"	class="nav-link" href="/#/instructor/course/{{x.courseId}}">{{x.courseName}}</a>
+			</li>			
+		</ul>
+		<p ng-if="courselist.length == 0">No courses. Try adding a new.</p>
+		<hr>
+		<div class="sidebar-btns">
+			<a class="side-btn" ng-click="model.createCourse()">	
+				<button class="btn btn-default menu-btn">
+						<i class="far fa-plus-square"></i> Add Courses
+				</button>
+			</a>
+		</div>
+	</div>
+	
+	<div class="assign-page column">
+	
+		
+		<h3>Dashboard</h3>
+		<hr>
+	
+		<div class="row">
+			<div class="col-md-4">
+				<div class="panel panel-info">
+					<div class="panel-heading home-panel">
+						<div class="row">
+							<div class="col-md-9">
+								<h4><i class="fas fa-graduation-cap"></i> Courses</h4>	
+							</div>
+							<div class="col-md-3">
+								<h3>{{num_courses}}</h3>
+							</div>
+						</div>
+						
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="panel panel-warning">
+					<div class="panel-heading home-panel">		
+						<div class="row">
+							<div class="col-md-9">
+								<h4><i class="fas fa-book"></i> Assignments</h4>
+							</div>
+							<div class="col-md-3">
+								<h3>{{num_assign}}</h3>
+							</div>
+						</div>		
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="panel panel-danger">
+					<div class="panel-heading home-panel">	
+						<div class="row">
+							<div class="col-md-9">
+		  						<h4><i class="fas fa-exclamation-triangle"></i> Plagiarism Reports</h4>
+							</div>
+							<div class="col-md-3">
+								<h3>{{num_reps}}</h3>
+							</div>
+						</div>						
+					</div>
+				</div>
+			</div>			
+						
+		</div>
+		
+		<div class="row">
+			<div class="col-md-6">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h4>Your Courses</h4>
+					</div>
+					<div class="panel-body">
+						<table class="table table-hover">
+							<thead>
+								<th>ID</th>
+								<th>Name</th>
+								<th>Instructor</th>
+								<th></th>
+							</thead>
+							<tbody>
+								<tr ng-repeat="x in courselist">
+									<td>{{x.courseId}}</td>
+									<td>{{x.courseName}}</td>
+									<td>{{x.faculty.emailId}}</td>
+									<td>
+										<button class="btn btn-primary" ng-click="model.editCourse(x.courseId)">
+											Edit
+										</button>
+										<button class="btn btn-danger" ng-click="model.deleteCourse(x.courseId)">
+											Delete
+										</button>
+									
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h4>All Assignments</h4>
+					</div>
+					<div class="panel-body">
+						<table class="table table-hover">
+							<thead>
+								<th>ID</th>
+								<th>Name</th>
+								<th>Course</th>
+								<th></th>
+							</thead>
+							<tbody>
+								<tr ng-repeat="y in all_assignments">
+									<td>{{y.assignmentId}}</td>
+									<td>{{y.assignmentName}}</td>
+									<td>{{y.course.courseName}}</td>
+									<td>
+										<button class="btn btn-primary">
+											Edit
+										</button>
+										<button class="btn btn-danger">
+											Delete
+										</button>
+									
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+				
+			
+			</div>
+		</div>
+		
+	</div>
+</div>

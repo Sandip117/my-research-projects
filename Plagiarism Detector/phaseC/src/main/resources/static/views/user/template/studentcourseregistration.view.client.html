@@ -1,0 +1,124 @@
+
+
+<nav class="navbar navbar-inverse">
+	<div class="container-fluid">
+		<div class="navbar-header">
+			<a class="navbar-brand" href="/#/student/">Sherl<i class="fas fa-search logo-icon-nav"></i>ck</a>
+		</div>
+		<ul class="nav navbar-nav">
+			<li class="active"><a href="#/student/">Home</a></li>
+		</ul>
+		<ul class="nav navbar-nav navbar-right">
+			<li><a href="#"><span class="glyphicon glyphicon-user"></span>
+					My Profile</a></li>
+			<li><a href="#" ng-click="model.logout()"><span
+					class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+		</ul>
+	</div>
+</nav>
+
+
+<div class="container clearfix">
+
+	<div class="course-menu column">
+		<li class="menu-title"><i class="glyphicon glyphicon-education"></i> Courses</li>
+		<ul ng-repeat="x in menuItems" class="nav nav-pills nav-stacked">
+			<li class="nav-item">
+				<a data-id="{{x.course.courseId}}" class="nav-link" href="/#/student/course/{{x.course.courseId}}">{{x.course.courseName}}</a>
+			</li>			
+		</ul>
+		<p ng-if="menuItems.length == 0">No courses. Try joining one!</p>
+		<hr>
+		<div class="sidebar-btns">
+			<a class="side-btn" href="#/student/course_reg/">	
+				<button class="btn btn-default menu-btn">
+						<i class="far fa-plus-square"></i> Join/Drop Courses
+				</button>
+			</a>
+		</div>
+
+	</div>
+	
+	<div class="assign-page column">
+		<h3 id="page-title">Join Course</h3>
+		<div class="create-course-form">
+
+
+			<div class="form-group">
+				<label for="semSelect"> Select Semester: </label> <select
+					id="semSelect" name="semSelect" class="form-control"
+					ng-model="semester" ng-change="model.selectSemesterId()"
+					ng-options="y.name for y in semesterlist">
+				</select>
+			</div>
+		</div>
+		<hr>
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h4>Registered Courses</h4>
+			</div>
+			<div class="panel-body">
+				<table class="table table-hover">
+					<thead>
+						<th>ID</th>
+						<th>Name</th>
+						<th>Semester</th>
+						<th>Professor</th>
+						<th></th>
+					</thead>
+					<tbody id="assignment-info">
+						<tr ng-repeat="x in courseForSemester">
+							<td>{{x.course.courseId}}</td>
+							<td>{{x.course.courseName}}</td>
+							<td>{{x.course.semester.name}}</td>
+							<td>{{x.course.faculty.emailId}}</td>
+							<td>
+								<button class="btn btn-danger" data-id={{x.course.courseId}}
+									ng-click="model.deleteCourse(x.registrationId)">Drop</button>
+							</td>
+						</tr>
+						<tr ng-if="courseForSemester.length == 0">
+							<td>Nothing to see here. Please select a semester or join a
+								course.</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<hr>
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h4>Unregistered Courses</h4>
+			</div>
+			<div class="panel-body">
+				<table class="table table-hover">
+					<thead>
+						<th>ID</th>
+						<th>Name</th>
+						<th>Semester</th>
+						<th>Professor</th>
+						<th></th>
+					</thead>
+					<tbody id="joined-courses">
+						<tr ng-repeat="x in availableCourseList">
+							<td>{{x.courseId}}</td>
+							<td>{{x.courseName}}</td>
+							<td>{{x.semester.name}}</td>
+							<td>{{x.faculty.emailId}}</td>
+							<td>
+
+								<button class="btn btn-success" ng-click="model.addCourse(x)">Join</button>
+							</td>
+						</tr>
+						<tr ng-if="availableCourseList.length == 0">
+							<td>No more courses available for this semester.</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+
+		<hr>
+
+	</div>
+</div>

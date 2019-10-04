@@ -1,0 +1,59 @@
+  <nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="#">Sherlock Homework</a>
+      </div>
+      <ul class="nav navbar-nav">
+        <li class="active"><a href="#">Home</a></li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="#"><span class="glyphicon glyphicon-user"></span> My Profile</a></li>
+        <li><a href="" ng-click="model.logout()"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+      </ul>
+    </div>
+  </nav>
+
+
+  <div class="container clearfix">
+    <div class="course-menu column">
+      <h4>Your Courses</h4>
+      <ul class="nav nav-pills nav-stacked">
+        <li class="nav-item">
+          <a class="nav-link" href="" ng-click="model.addUser()">Add an user</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">View all Users</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="" ng-click="model.setCurrentSemester()">Set Current Semester</a>
+        </li>
+      </ul>
+    </div>
+    <div class="assign-page column">
+      <hr>
+      <div class="create-course-form">
+      				<div ng-show="model.success"
+							class="alert alert-success login-alert">
+							<strong> {{model.success}}</strong>.
+					</div>
+					<div ng-show="model.error"
+							class="alert alert-warning login-alert">
+							<strong>Error!</strong> {{model.error}}.
+					</div>
+        <div class="form-group">
+          <label for="new-course-name">New Password</label>
+          <input type="text" ng-model="model.user.password" class="form-control" id="new-password">
+        </div>
+        <div class="form-group">
+          <label for="new-course-number">Email Id</label>
+          <input type="text" ng-model="model.user.emailId" class="form-control" id="new-email">
+        </div>
+        <div class="form-group">
+          <label for="new-course-sem">Role</label>
+          <input type="text" ng-model="model.user.role" class="form-control" id="new-role">   
+        </div>
+        <button ng-click="model.updateUser(model.user)" class="btn btn-success">Submit</button>
+        <button ng-click="model.cancel()" class="btn btn-danger">Cancel</button>
+      </div>
+    </div>
+  </div>

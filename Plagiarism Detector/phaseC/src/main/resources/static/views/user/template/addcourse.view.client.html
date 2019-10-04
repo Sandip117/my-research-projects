@@ -1,0 +1,95 @@
+ <nav class="navbar navbar-inverse">
+	<div class="container-fluid">
+		<div class="navbar-header">
+			<a class="navbar-brand" href="#">Sherl<i class="fas fa-search logo-icon-nav"></i>ck</a>
+		</div>
+		<ul class="nav navbar-nav">
+			<li class="active"><a href="#/instructor/">Home</a></li>
+		</ul>
+		<ul class="nav navbar-nav navbar-right">
+			<li><a href="#"><span class="glyphicon glyphicon-user"></span>
+					{{current_user_name}}</a></li>
+			<li><a href="#" ng-click="model.logout()"><span
+					class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+		</ul>
+	</div>
+</nav>
+
+<div class="container clearfix">
+	<div class="course-menu column">
+		<li class="menu-title"><i class="glyphicon glyphicon-education"></i> Courses</li>
+		<ul ng-repeat="x in courselist" class="nav nav-pills nav-stacked">
+			<li ng-if="x == selected_course" class="nav-item active">
+				<a data-id="{{x.courseId}}"	class="nav-link" href="/#/instructor/course/{{x.courseId}}">{{x.courseName}}</a>
+			</li>
+			<li ng-if="x != selected_course" class="nav-item">
+				<a data-id="{{x.courseId}}"	class="nav-link" href="/#/instructor/course/{{x.courseId}}">{{x.courseName}}</a>
+			</li>			
+		</ul>
+		<p ng-if="courselist.length == 0">No courses. Try adding a new.</p>
+		<hr>
+		<div class="sidebar-btns">
+			<a class="side-btn" ng-click="model.createCourse()">	
+				<button class="btn btn-default menu-btn">
+						<i class="far fa-plus-square"></i> Add Courses
+				</button>
+			</a>
+		</div>
+	</div>
+
+    <div class="assign-page column">
+      <h3 id="page-title">Add Course</h3>
+		<ol class="breadcrumb">
+  			<li><a href="/#/instructor">Home</a></li>
+  			<li><a href="/#/instructor">Courses</a></li>
+  			<li class="active">Add Course</li>
+		</ol>
+		
+		<hr>
+      <div class="create-course-form">
+        <div class="form-group">
+          <label for="new-course-name">Title</label>
+          <input type="text" ng-model="model.course.courseName" class="form-control" id="new-course-name">
+        </div>
+        <div class="form-group">
+          <label for="new-course-number">Course Number</label>
+          <input type="text" ng-model="model.course.courseNumber" class="form-control" id="new-course-number">
+        </div>
+        <div class="form-group">
+          <label for="new-course-sem">Semester</label>
+          <select class="form-control" ng-model="model.course.semester" id="new-course-sem">
+            <option ng-repeat="y in semlist" value="{{y.semesterId}}">{{y.name}}</option>
+          </select>
+        </div>
+        <button ng-click="model.addCourse(model.course)" class="btn btn-success">Submit</button>
+      </div>
+      <hr>
+
+      <div class="panel panel-default">
+        <div class="panel-heading">
+            <h4>Courses</h4>
+        </div>
+        <div class="panel-body">
+          <table class="table table-hover">
+            <thead>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Semester</th>
+              <th></th>
+            </thead>
+            <tbody id="assignment-info">
+              <tr ng-repeat="x in courselist">
+                <td>{{x.courseNumber}}</td>
+                <td>{{x.courseName}}</td>
+                <td>{{x.semester.name}}</td>
+                <td>
+                  <button class="btn btn-primary" data-id={{x.courseId}} val={{x.courseId]} ng-click="model.editCourse(x.courseId)">Edit</button>
+                  <button class="btn btn-danger" data-id={{x.courseId}} ng-click="model.deleteCourse(x.courseId)">Delete</button>
+                </td>
+              </tr>
+              </tbody>
+              </table>
+        </div>
+      </div>
+    </div>
+  </div>

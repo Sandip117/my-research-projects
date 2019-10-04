@@ -1,0 +1,75 @@
+
+<nav class="navbar navbar-inverse">
+	<div class="container-fluid">
+		<div class="navbar-header">
+			<a class="navbar-brand" href="#">Sherl<i class="fas fa-search logo-icon-nav"></i>ck</a>
+		</div>
+		<ul class="nav navbar-nav">
+			<li class="active"><a href="#/instructor/">Home</a></li>
+		</ul>
+		<ul class="nav navbar-nav navbar-right">
+			<li><a href="#"><span class="glyphicon glyphicon-user"></span>
+					My Profile</a></li>
+			<li><a href="#" ng-click="model.logout()"><span
+					class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+		</ul>
+	</div>
+</nav>
+
+
+<div class="container clearfix">
+	<div class="course-menu column">
+		<li class="menu-title"><i class="glyphicon glyphicon-education"></i> Courses</li>
+		<ul ng-repeat="x in courselist" class="nav nav-pills nav-stacked">
+			<li class="nav-item active" ng-if="x.courseId == current_course.courseId">
+				<a data-id="{{x.courseId}}"	href="/#/instructor/course/{{x.courseId}}" class="nav-link">{{x.courseName}}</a>
+			</li>
+			<li class="nav-item" ng-if="x.courseId != current_course.courseId">
+				<a data-id="{{x.courseId}}"	href="/#/instructor/course/{{x.courseId}}" class="nav-link">{{x.courseName}}</a>
+			</li>
+		</ul>
+		<p ng-if="courselist.length == 0">No courses. Try adding a new.</p>
+		<hr>
+		<div class="sidebar-btns">
+			<a class="side-btn" href="/#/instructor/addCourse">	
+				<button class="btn btn-default menu-btn">
+						<i class="far fa-plus-square"></i> Add Courses
+				</button>
+			</a>
+		</div>
+	</div>
+	
+	<div class="assign-page column">
+		
+		<h3>Submissions</h3>
+		<ol class="breadcrumb">
+  			<li><a href="/#/instructor">Home</a></li>
+  			<li><a href="/#/instructor">Courses</a></li>
+  			<li><a href="/#/instructor/course/{{current_course.courseId}}">{{current_course.courseName}}</a></li>
+  			<li>{{current_assignment.assignmentName}}</li>
+  			<li class="active">Submissions</li>
+		</ol>
+		<hr>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h4>Submissions</h4>
+					</div>
+					<div class="panel-body">
+						<table class="table table-hover">
+							<thead>
+								<th>No.</th>
+								<th>Student Email</th>
+								<th>Folder Link</th>
+							</thead>
+							<tbody id="assignment-info">
+								<tr ng-repeat="x in submissionList">
+									<td>{{x.id}}</td>
+                  <td>{{x.student}}</td>
+                  <td>{{x.fileLink}}</td>
+  							</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+	</div>

@@ -1,0 +1,113 @@
+
+<nav class="navbar navbar-inverse">
+	<div class="container-fluid">
+		<div class="navbar-header">
+			<a class="navbar-brand" href="/#/">Sherlock Homework</a>
+		</div>
+		<ul class="nav navbar-nav">
+			<li class="active"><a href="#">Home</a></li>
+			<li class="dropdown"><a class="dropdown-toggle"
+				data-toggle="dropdown" href="#">Page 1 <span class="caret"></span></a>
+				<ul class="dropdown-menu">
+					<li><a href="#">Page 1-1</a></li>
+					<li><a href="#">Page 1-2</a></li>
+					<li><a href="#">Page 1-3</a></li>
+				</ul></li>
+			<li><a href="#">Page 2</a></li>
+		</ul>
+		<ul class="nav navbar-nav navbar-right">
+			<li><a href="#"><span class="glyphicon glyphicon-user"></span>
+					My Profile</a></li>
+			<li><a href="/#/"><span
+					class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+		</ul>
+	</div>
+</nav>
+
+<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog"
+	aria-labelledby="myLargeModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">Report</h4>
+			</div>
+			<div class="modal-body">
+				<div class="container">
+					<div class="row">
+						<div clas="col">
+							<h3>Plagiarism Score: <span class="label label-danger">{{reportPc}}%</span></h3>
+							<h5>Lines Copied: {{reportLinesCopied}}</h5>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-6">
+							<p>{{reportStudent1}}</p>
+							<iframe ng-src="{{trustSrc(reportFirstSide)}}" width=90% height=70%></iframe>
+						</div>
+						<div class="col-md-6">
+							<p>{{reportStudent2}}</p>
+							<iframe ng-src="{{trustSrc(reportSecondSide)}}"width=90% height=70%></iframe>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="container clearfix">
+	<div class="course-menu column">
+		<h4>Your Courses</h4>
+		<hr>
+		<ul ng-repeat="x in courselist" class="nav nav-pills nav-stacked">
+			<li class="nav-item"><a data-id="{{x.courseId}}"
+				class="nav-link" ng-click="model.getAllAssignmentsForCourseID(x)">{{x.courseName}}</a>
+			</li>
+		</ul>
+		<li ng-if="courselist.length == 0">No courses. Try adding a new.</li>
+		<hr>
+		<ul class="nav nav-pills nav-stacked">
+			<li class="nav-item">
+				<a ng-click="model.createCourse()">Add Courses</a>
+			</li>
+		</ul>
+	</div>
+	<div class="assign-page column">
+		<hr>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<div class="row">
+							<div class="col-md-6">
+								<h4>Submissions</h4>
+							</div>
+							<div class="col-md-6">
+								<a href> <a
+									href="/#/instructor/{{model.userId}}/newAssignment/{{model.thisCourse.courseId}}"
+									class="btn btn-default btn-sm"
+									style="float: right; margin-top: 5px;" id="new-assignment">
+										<span class="glyphicon glyphicon-plus"></span> New Assignment
+								</a>
+								</a>
+							</div>
+						</div>
+					</div>
+					<div class="panel-body">
+						<table class="table table-hover">
+							<thead>
+								<th>No.</th>
+								<th>Student Email</th>
+								<th>Folder Link</th>
+							</thead>
+							<tbody id="assignment-info">
+								<tr ng-repeat="x in submissionList">
+									<td>{{x.id}}</td>
+                  <td>{{x.student}}</td>
+                  <td>{{x.fileLink}}</td>
+  							</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+	</div>

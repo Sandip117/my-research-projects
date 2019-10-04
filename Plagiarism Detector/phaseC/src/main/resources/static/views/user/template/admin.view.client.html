@@ -1,0 +1,59 @@
+  <nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="#">Sherlock Homework</a>
+      </div>
+      <ul class="nav navbar-nav">
+        <li class="active"><a href="#">Home</a></li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="#"><span class="glyphicon glyphicon-user"></span> My Profile</a></li>
+        <li><a href="" ng-click="model.logout()"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+      </ul>
+    </div>
+  </nav>
+
+
+  <div class="container clearfix">
+    <div class="course-menu column">
+      <h4>Perform</h4>
+      <ul class="nav nav-pills nav-stacked">
+        <li class="nav-item">
+          <a class="nav-link" href="" ng-click="model.addUser()">Add an user</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">View all Users</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="" ng-click="model.setCurrentSemester()">Set Current Semester</a>
+        </li>
+      </ul>
+    </div>
+    <div class="assign-page column">
+      <hr>
+      <div class="panel panel-default">
+        <div class="panel-heading"><h4>Students</h4></div>
+        <div class="panel-body" data-ng-controller="adminController" data-ng-init="init()" >
+          <table class="table">
+            <thead>
+              <th>No.</th>
+              <th>Name</th>
+              <th>Role</th>
+              <th>Update/Delete</th>
+            </thead>
+            <tbody id="user-info">
+              <tr data-ng-repeat="x in userlist">
+              	<td>{{x.id}}</td>
+                <td>{{x.emailId}}</td>
+                <td>{{x.role}}</td>
+                <td><button class="btn btn-primary" data-id={{x.id}} val={{x.id]} ng-click="model.editUser(x.emailId)">Update</button>
+                  <button class="btn btn-danger" data-id={{x.id}} val={{x.id]} ng-click="model.removeUser(x.id)">Delete</button>
+                  </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>

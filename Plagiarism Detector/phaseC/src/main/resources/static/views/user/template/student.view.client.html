@@ -1,0 +1,76 @@
+
+<nav class="navbar navbar-inverse">
+	<div class="container-fluid">
+		<div class="navbar-header">
+			<a class="navbar-brand" href="/#/student">Sherl<i class="fas fa-search logo-icon-nav"></i>ck</a>
+		</div>
+		<ul class="nav navbar-nav">
+			<li class="active"><a href="#/student/">Home</a></li>
+			</ul>
+		<ul class="nav navbar-nav navbar-right">
+			<li><a href="#"><span class="glyphicon glyphicon-user"></span>
+					My Profile</a></li>
+			<li><a href="#" ng-click="model.logout()"><span
+					class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+		</ul>
+	</div>
+</nav>
+
+
+<div class="container clearfix">
+
+	<div class="course-menu column">
+		<li class="menu-title"><i class="glyphicon glyphicon-education"></i> Courses</li>
+		<ul ng-repeat="x in courseForSemester" class="nav nav-pills nav-stacked">
+			<li ng-if="x.course == selected_course" class="nav-item active">
+				<a data-id="{{x.course.courseId}}"	class="nav-link" href="/#/student/course/{{x.course.courseId}}">{{x.course.courseName}}</a>
+			</li>
+			<li ng-if="x.course != selected_course" class="nav-item">
+				<a data-id="{{x.course.courseId}}" class="nav-link" href="/#/student/course/{{x.course.courseId}}">{{x.course.courseName}}</a>
+			</li>			
+		</ul>
+		<p ng-if="courseForSemester.length == 0">No courses. Try joining one!</p>
+		<hr>
+		<div class="sidebar-btns">
+			<a class="side-btn" href="#/student/course_reg/">	
+				<button class="btn btn-default menu-btn">
+						<i class="far fa-plus-square"></i> Join/Drop Courses
+				</button>
+			</a>
+		</div>
+
+	</div>
+	<div class="assign-page column">
+		<h3 id="course-title">Course: {{selected_course.courseName}}</h3>
+		<h4 id="semester-name">{{selected_course.semester.name}}</h4>
+		<ol class="breadcrumb">
+  			<li><a href="/#/student">Home</a></li>
+  			<li><a href="/#/student">Courses</a></li>
+  			<li class="active">{{selected_course.courseName}}</li>
+		</ol>
+		<hr>
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h4>Assignments</h4>
+			</div>
+			<div class="panel-body">
+				<table class="table">
+					<thead>
+						<th>No.</th>
+						<th>Name</th>
+
+						<th>Submitted</th>
+					</thead>
+					<tbody id="assignment-info">
+						<tr ng-repeat="x in assignmentList">
+							<td>{{x.assignmentId}}</td>
+							<td><a href="#/student/course/{{courseId}}/assignment/{{x.assignmentId}}">{{x.assignmentName}}</a></td>
+							<td><span class="label label-danger">No</span></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+
+	</div>
+</div>

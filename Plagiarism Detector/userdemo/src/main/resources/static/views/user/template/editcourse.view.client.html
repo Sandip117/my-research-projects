@@ -1,0 +1,75 @@
+  <nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="#">Sherlock Homework</a>
+      </div>
+      <ul class="nav navbar-nav">
+        <li class="active"><a href="#">Home</a></li>
+        <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Page 1 <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="#">Page 1-1</a></li>
+            <li><a href="#">Page 1-2</a></li>
+            <li><a href="#">Page 1-3</a></li>
+          </ul>
+        </li>
+        <li><a href="#">Page 2</a></li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="#"><span class="glyphicon glyphicon-user"></span> My Profile</a></li>
+        <li><a href="/#/"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Report</h4>
+        </div>
+        <div class="modal-body">
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="container clearfix">
+  <div class="course-menu column">
+  <h4>Your Courses</h4>
+  <ul class="nav nav-pills nav-stacked">
+    <li class="nav-item">
+      <a class="nav-link" href="#">Managing Software Development</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="#">Web Development</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="#">Database Management System</a>
+    </li>
+  </ul>
+</div>
+    <div class="assign-page column">
+      <h3 id="page-title">Edit Course</h3>
+      <div class="create-course-form">
+        <div class="form-group">
+          <label for="new-course-name">Title</label>
+          <input type="text" class="form-control" ng-model="model.course.courseName" id="new-course-name" ng-value="c_title">
+        </div>
+        <div class="form-group">
+          <label for="new-course-id">Course ID</label>
+          <input type="text" class="form-control" ng-model="model.course.courseId" id="new-course-id" ng-value="c_id" readonly>
+        </div>
+        <div class="form-group">
+          <label for="new-course-sem">Semester</label>
+          <select class="form-control" ng-model="model.course.semester" id="new-course-sem">
+                <option ng-repeat="y in semlist" value={{y.semesterId}}>{{y.name}}</option>
+          </select>
+        </div>
+        <button class="btn btn-success" ng-click="model.patchCourse(model.course)">Submit</button>
+      </div>
+      <hr>
+
+    </div>
+  </div>

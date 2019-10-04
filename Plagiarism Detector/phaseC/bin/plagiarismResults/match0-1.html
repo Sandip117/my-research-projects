@@ -1,0 +1,77 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD>
+ <TITLE>Defeat1.java</TITLE>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <script type="text/javascript">
+  <!--
+   function ZweiFrames(URL1,F1,URL2,F2)
+   {
+    parent.frames[F1].location.href=URL1;
+    parent.frames[F2].location.href=URL2;
+   }
+  //-->
+  </script>
+</HEAD>
+<BODY BGCOLOR="#ffffff" style="margin-left:25">
+<HR>
+<H3><CENTER>Defeat1.java</CENTER></H3><HR>
+<PRE>
+// Constructor template for Tie1:
+//     new Defeat1 (Competitor c1, Competitor c2)
+// Interpretation:
+<A NAME="0"></A>//     c1 and c2 have engaged in a contest that ended with
+//         c1 defeating c2
+
+<FONT color="#0000ff"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match0-0.html#0',2,'match0-top.html#0',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>public class Defeat1 implements Outcome {
+
+    Competitor c1; // the winner of the outcome
+    Competitor c2; // the loser of the outcome
+
+    // the Java constructor
+    Defeat1(Competitor c1, Competitor c2) {
+        this.c1 = c1;
+        this.c2 = c2;
+    }
+
+    // public methods
+    // RETURNS: true iff this outcome represents a tie
+    public boolean isTie() {
+        return false;
+    }
+
+    // RETURNS: one of the competitors
+    public Competitor first() {
+        return c1;
+    }
+
+    // RETURNS: the other competitor
+    public Competitor second() {
+        return c2;
+    }
+
+    // GIVEN: no arguments
+    // WHERE: this.isTie() is false
+    // RETURNS: the winner of this outcome
+    public Competitor winner() {
+        if (!this.isTie()) {
+            return c1;
+        } else {
+            throw new UnsupportedOperationException();
+        }
+    }
+
+    // GIVEN: no arguments
+    // WHERE: this.isTie() is false
+    // RETURNS: the loser of this outcome
+    public Competitor loser() {
+        if (!this.isTie()) {
+            return c2;
+        } else {
+            throw new UnsupportedOperationException();
+        }
+    }
+}</B></FONT>
+</PRE>
+</BODY>
+</HTML>

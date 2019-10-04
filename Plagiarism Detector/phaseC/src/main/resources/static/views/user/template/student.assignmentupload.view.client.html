@@ -1,0 +1,97 @@
+
+<nav class="navbar navbar-inverse">
+	<div class="container-fluid">
+		<div class="navbar-header">
+			<a class="navbar-brand" href="/#/student">Sherl<i class="fas fa-search logo-icon-nav"></i>ck</a>
+		</div>
+		<ul class="nav navbar-nav">
+			<li class="active"><a href="#/student/">Home</a></li>
+		</ul>
+		<ul class="nav navbar-nav navbar-right">
+			<li><a href="#"><span class="glyphicon glyphicon-user"></span>
+					My Profile</a></li>
+			<li><a href="#" ng-click="model.logout()"><span
+					class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+		</ul>
+	</div>
+</nav>
+
+
+<div class="container clearfix">
+
+	<div class="course-menu column">
+		<li class="menu-title"><i class="glyphicon glyphicon-education"></i> Courses</li>
+		<ul ng-repeat="x in courseForSemester" class="nav nav-pills nav-stacked">
+			<li ng-if="x.course.courseId == assignment.course.courseId" class="nav-item active">
+				<a data-id="{{x.course.courseId}}"	class="nav-link" href="/#/student/course/{{x.course.courseId}}">{{x.course.courseName}}</a>
+			</li>
+			<li ng-if="x.course.courseId != assignment.course.courseId" class="nav-item">
+				<a data-id="{{x.course.courseId}}" class="nav-link" href="/#/student/course/{{x.course.courseId}}">{{x.course.courseName}}</a>
+			</li>			
+		</ul>
+		<p ng-if="courseForSemester.length == 0">No courses. Try joining one!</p>
+		<hr>
+		<div class="sidebar-btns">
+			<a class="side-btn" href="#/student/course_reg/">	
+				<button class="btn btn-default menu-btn">
+						<i class="far fa-plus-square"></i> Join/Drop Courses
+				</button>
+			</a>
+		</div>
+		</div>
+		
+  <div class="assign-page column">
+    <h3 id="course-title">Course: {{assignment.course.courseName}}</h3>
+    <h4 id="semester-name">{{assignment.course.semester.name}}</h4>
+    <ol class="breadcrumb">
+  			<li><a href="/#/student">Home</a></li>
+  			<li><a href="/#/student">Courses</a></li>
+  			<li><a href="/#/student/course/{{assignment.course.courseId}}">{{assignment.course.courseName}}</a></li>
+  			<li class="active">{{assignment.assignmentName}}</li>
+	</ol>
+    <hr>
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <div class="row">
+          <div class="col-md-9">
+            <h4>Assignment Name: <span id="assignment-title"><b>{{assignment.assignmentName}}</b></span></h4>
+          </div>
+          <div class="col-md-3" id="due-date" style="margin-top:4px;">
+            <div class="due-tag" style="float:right;">
+              <b><i><h5>Due Date: <span id="assignment-due-date">April 16, 2018 - 11:59PM</span></h5></i></b>
+            </div>
+          </div>
+        </div>
+      </div>
+      <form action="/api/upload"  method="post" enctype="multipart/form-data">
+      <div class="panel-body">
+        <h4>Description:</h4>
+        <div id="assignment-desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>
+        <hr>
+        <div id="assignment-upload">
+          <div class="input-group">
+           <label class="input-group-btn">
+               <span class="btn btn-primary">
+                   Upload Assignment&hellip; <input type="file" id="uploadFile" style="display: none;" name="myFiles" accept=".py" multiple required>
+               </span>
+           </label>
+           <input type="text" class="form-control" readonly>
+       </div>
+     </div>
+      </div>
+      <div class="panel-footer">
+        <input type="text" value={{courseId}} name="course" style="display: none;"/>
+        <input type="text" value={{userId}} name="user" style="display: none;"/>
+        <input type="text" value={{assignId}} name="assign" style="display: none;"/>
+        <input type="text" value={{currSem}} name="sem" style="display: none;"/>
+        <input type="text" value={{userSubmissions.length}} name="subid" style="display: none;"/>
+
+        <button type="submit" id="upload" ng-click="model.clickSubmit()" class="btn btn-success" style="width:15%; margin-right:1%;"><b>Submit</b></button>
+        <a href="/#/student/course/{{assignment.course.courseId}}"><button type="button" class="btn btn-danger" style="width:15%;"><b>Discard</b></button></a>
+      </div>
+    </form>
+    </div>
+
+  </div>
+</div>
+<script src="js/upload-helper.js"></script>

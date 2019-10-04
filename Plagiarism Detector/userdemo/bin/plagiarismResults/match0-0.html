@@ -1,0 +1,77 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD>
+ <TITLE>Tie1.java</TITLE>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <script type="text/javascript">
+  <!--
+   function ZweiFrames(URL1,F1,URL2,F2)
+   {
+    parent.frames[F1].location.href=URL1;
+    parent.frames[F2].location.href=URL2;
+   }
+  //-->
+  </script>
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+<HR>
+<H3><CENTER>Tie1.java</CENTER></H3><HR>
+<PRE>
+// Constructor template for Tie1:
+//     new Tie1 (Competitor c1, Competitor c2)
+<A NAME="0"></A>// Interpretation:
+//     c1 and c2 have engaged in a contest that ended in a tie
+
+<FONT color="#0000ff"><A HREF="javascript:ZweiFrames('match0-1.html#0',3,'match0-top.html#0',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>public class Tie1 implements Outcome {
+
+    Competitor c1; // the first competitor of the tie
+    Competitor c2; // the second competitor of the tie
+
+    // the java constructor
+    Tie1(Competitor c1, Competitor c2) {
+        this.c1 = c1;
+        this.c2 = c2;
+    }
+
+    // RETURNS: true iff this outcome represents a tie
+    public boolean isTie() {
+        return true;
+    }
+
+    // RETURNS: one of the competitors
+    public Competitor first() {
+        return c1;
+    }
+
+    // RETURNS: the other competitor
+    public Competitor second() {
+        return c2;
+    }
+
+    // GIVEN: no arguments
+    // WHERE: this.isTie() is false
+    // RETURNS: the winner of this outcome
+    public Competitor winner() {
+        if (!this.isTie()) {
+            return c1;
+        } else {
+
+            throw new UnsupportedOperationException(&quot;Competitors are in tie&quot;);
+        }
+    }
+
+    // GIVEN: no arguments
+    // WHERE: this.isTie() is false
+    // RETURNS: the loser of this outcome
+    public Competitor loser() {
+        if (!this.isTie()) {
+            return c2;
+        } else {
+            throw new UnsupportedOperationException(&quot;Competitors are in tie&quot;);
+        }
+
+    }
+}</B></FONT>
+</PRE>
+</BODY>
+</HTML>

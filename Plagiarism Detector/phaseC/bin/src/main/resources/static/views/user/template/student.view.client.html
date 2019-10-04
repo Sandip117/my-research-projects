@@ -1,0 +1,72 @@
+
+<nav class="navbar navbar-inverse">
+	<div class="container-fluid">
+		<div class="navbar-header">
+
+			<a class="navbar-brand" href="/#/student/{{userId}}">Sherlock Homework</a>
+		</div>
+		<ul class="nav navbar-nav">
+			<li class="active"><a href="/#/student/{{userId}}">Home</a></li>
+		</ul>
+		<ul class="nav navbar-nav navbar-right">
+			<li><a href="#"><span class="glyphicon glyphicon-user"></span>
+					My Profile</a></li>
+			<li><a href="/#/"><span class="glyphicon glyphicon-log-out"></span>
+					Logout</a></li>
+		</ul>
+	</div>
+</nav>
+
+<div class="container clearfix">
+
+	<div class="course-menu column">
+
+		<!--<div class="form-group">-->
+			<!--<label for="repeatSelect"> Select Semester: </label>-->
+			<!--<select name="repeatSelect" class="form-control" ng-model="semester"-->
+				<!--ng-change="model.selectSemesterId()"-->
+				<!--ng-options="y.name for y in semesterlist">-->
+				<!--&lt;!&ndash; <option  ng-repeat="y in semesterlist"-->
+             <!--value={{y.id}} data-id={{y.id}}>{{y.name}}</option> &ndash;&gt;-->
+			<!--</select>-->
+		<!--</div>-->
+
+		<ul class="nav nav-pills nav-stacked menu-list">
+			<li ng-repeat="y in courseForSemester" class="nav-item"><a class="nav-link" href="#/student/{{userId}}/course/{{y.course.courseId}}">{{y.course.courseName}}</a></li>
+		</ul>
+
+		<ul class="nav nav-pills nav-stacked menu-list">
+			<li class="nav-item"><a href="#/student/{{model.userId}}/course_reg/">Join/Drop Courses</a></li>
+		</ul>
+		<!--<button class="nav-item"><a class="nav-link" -->
+				<!--href="#/student/{{model.userId}}/addcourse/{{model.semesterId}}">Add Course</a></button>-->
+	</div>
+	<div class="assign-page column">
+		<h3 id="course-title">Course: {{course.courseName}}</h3>
+		<h4 id="semester-name">{{course.semester.name}}</h4>
+		<hr>
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h4>Assignments</h4>
+			</div>
+			<div class="panel-body">
+				<table class="table">
+					<thead>
+						<th>No.</th>
+						<th>Name</th>
+
+						<th>Submitted</th>
+					</thead>
+					<tbody id="assignment-info">
+						<tr ng-repeat="x in assignmentList">
+							<td>{{x.assignmentId}}</td>
+							<td><a href="#/student/{{userId}}/course/{{courseId}}/assignment/{{x.assignmentId}}">{{x.assignmentName}}</a></td>
+							<td><span class="label label-danger">No</span></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+
+	</div>
+</div>

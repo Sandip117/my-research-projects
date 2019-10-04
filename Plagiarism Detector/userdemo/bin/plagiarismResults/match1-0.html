@@ -1,0 +1,267 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD>
+ <TITLE>PdpQ2Tests.java</TITLE>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <script type="text/javascript">
+  <!--
+   function ZweiFrames(URL1,F1,URL2,F2)
+   {
+    parent.frames[F1].location.href=URL1;
+    parent.frames[F2].location.href=URL2;
+   }
+  //-->
+  </script>
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+<HR>
+<H3><CENTER>PdpQ2Tests.java</CENTER></H3><HR>
+<PRE>
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * Tests for Problem Set 09, part 2.
+ */
+<A NAME="0"></A>public class PdpQ2Tests {
+
+    public static void main(String[] args) {
+<FONT color="#0000ff"><A HREF="javascript:ZweiFrames('match1-1.html#0',3,'match1-top.html#0',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>        PdpTestSuite tests = new PdpTestSuite(60);
+        
+        /* Tests for Competitor1.outranks and outrankedBy */
+        
+        tests.addTestCase(&quot;outranks - simple cycle&quot;,
+                () -&gt; competitor(&quot;A&quot;).outranks(list(
+                        defeated(&quot;C&quot;, &quot;B&quot;),
+                        defeated(&quot;B&quot;, &quot;A&quot;),
+                        defeated(&quot;A&quot;, &quot;C&quot;),
+                        tie(&quot;B&quot;, &quot;C&quot;))),
+                list(&quot;A&quot;, &quot;B&quot;, &quot;C&quot;));
+        
+        tests.addTestCase(&quot;A outranks B and D transitively&quot;,
+                () -&gt; competitor(&quot;A&quot;).outranks(list(
+                        defeated(&quot;C&quot;, &quot;B&quot;),
+                        defeated(&quot;A&quot;, &quot;C&quot;),
+                        tie(&quot;B&quot;, &quot;D&quot;))),
+                list(&quot;B&quot;, &quot;C&quot;, &quot;D&quot;));
+        
+        tests.addTestCase(&quot;E does not outrank anyone&quot;,
+                () -&gt; competitor(&quot;E&quot;).outranks(list(
+                        defeated(&quot;C&quot;, &quot;E&quot;),
+                        defeated(&quot;B&quot;, &quot;C&quot;),
+                        tie(&quot;B&quot;, &quot;D&quot;),
+                        tie(&quot;D&quot;, &quot;B&quot;))),
+                list());
+        
+        tests.addTestCase(&quot;outranks - cycle with a tie&quot;,
+                () -&gt; competitor(&quot;A&quot;).outranks(list(
+                        defeated(&quot;A&quot;, &quot;B&quot;),
+                        defeated(&quot;B&quot;, &quot;C&quot;),
+                        defeated(&quot;C&quot;, &quot;D&quot;),
+                        defeated(&quot;D&quot;, &quot;E&quot;),
+                        tie(&quot;A&quot;, &quot;E&quot;))),
+                list(&quot;A&quot;, &quot;B&quot;, &quot;C&quot;, &quot;D&quot;, &quot;E&quot;));
+        
+        tests.addTestCase(&quot;outrankedBy - small cycle&quot;,
+                () -&gt; competitor(&quot;C&quot;).outrankedBy(list(
+                        defeated(&quot;A&quot;, &quot;B&quot;),
+                        defeated(&quot;B&quot;, &quot;C&quot;),
+                        defeated(&quot;C&quot;, &quot;D&quot;),
+                        defeated(&quot;D&quot;, &quot;E&quot;),
+                        tie(&quot;C&quot;, &quot;E&quot;))),
+                list(&quot;A&quot;, &quot;B&quot;, &quot;C&quot;, &quot;D&quot;, &quot;E&quot;));
+        
+        tests.addTestCase(&quot;outrankedBy - A is undefeated&quot;,
+                () -&gt; competitor(&quot;A&quot;).outrankedBy(list(
+                        defeated(&quot;A&quot;, &quot;B&quot;),
+                        defeated(&quot;B&quot;, &quot;C&quot;),
+                        defeated(&quot;C&quot;, &quot;D&quot;),
+                        defeated(&quot;D&quot;, &quot;E&quot;),
+                        tie(&quot;C&quot;, &quot;E&quot;))),
+                list());
+        
+        tests.addTestCase(&quot;outrankedBy - F is undefeated&quot;,
+                () -&gt; competitor(&quot;F&quot;).outrankedBy(list(
+                        defeated(&quot;B&quot;, &quot;C&quot;),
+                        defeated(&quot;C&quot;, &quot;E&quot;),
+                        defeated(&quot;E&quot;, &quot;L&quot;),
+                        defeated(&quot;F&quot;, &quot;K&quot;),
+                        defeated(&quot;G&quot;, &quot;K&quot;),
+                        defeated(&quot;J&quot;, &quot;L&quot;),
+                        defeated(&quot;K&quot;, &quot;B&quot;),
+                        defeated(&quot;L&quot;, &quot;P&quot;),
+                        defeated(&quot;P&quot;, &quot;B&quot;),
+                        tie(&quot;C&quot;, &quot;E&quot;))),
+                list());
+
+        tests.addTestCase(&quot;outranks - multiple cycles 1&quot;,
+                () -&gt; competitor(&quot;F&quot;).outranks(list(
+                        defeated(&quot;B&quot;, &quot;C&quot;),
+                        defeated(&quot;C&quot;, &quot;E&quot;),
+                        defeated(&quot;E&quot;, &quot;L&quot;),
+                        defeated(&quot;F&quot;, &quot;K&quot;),
+                        defeated(&quot;G&quot;, &quot;K&quot;),
+                        defeated(&quot;J&quot;, &quot;L&quot;),
+<A NAME="1"></A>                        defeated(&quot;K&quot;, &quot;B&quot;),
+                        defeated(&quot;L&quot;, &quot;P&quot;),
+                        defeated(&quot;P&quot;, &quot;B&quot;),</B></FONT>
+<FONT color="#f63526"><A HREF="javascript:ZweiFrames('match1-1.html#1',3,'match1-top.html#1',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>                        tie(&quot;C&quot;, &quot;E&quot;))),
+                list(&quot;B&quot;, &quot;C&quot;, &quot;E&quot;, &quot;K&quot;, &quot;L&quot;, &quot;P&quot;));
+
+        tests.addTestCase(&quot;outranks - multiple cycles 2&quot;,
+                () -&gt; competitor(&quot;E&quot;).outranks(list(
+                        defeated(&quot;B&quot;, &quot;C&quot;),
+                        defeated(&quot;C&quot;, &quot;E&quot;),
+                        defeated(&quot;E&quot;, &quot;L&quot;),
+                        defeated(&quot;F&quot;, &quot;K&quot;),
+                        defeated(&quot;G&quot;, &quot;K&quot;),
+                        defeated(&quot;J&quot;, &quot;L&quot;),
+                        defeated(&quot;K&quot;, &quot;B&quot;),
+                        defeated(&quot;L&quot;, &quot;P&quot;),
+                        defeated(&quot;P&quot;, &quot;B&quot;),
+                        tie(&quot;C&quot;, &quot;E&quot;),
+<A NAME="2"></A>                        tie(&quot;J&quot;, &quot;P&quot;))),
+                list(&quot;B&quot;, &quot;C&quot;, &quot;E&quot;, &quot;J&quot;, &quot;L&quot;, &quot;P&quot;));</B></FONT>
+        
+<FONT color="#77bfc7"><A HREF="javascript:ZweiFrames('match1-1.html#2',3,'match1-top.html#2',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>        tests.addTestCase(&quot;outrankedBy - self-outrank due to tie&quot;,
+                () -&gt; competitor(&quot;F&quot;).outrankedBy(list(
+                        tie(&quot;G&quot;, &quot;K&quot;),
+                        defeated(&quot;K&quot;, &quot;B&quot;),
+                        tie(&quot;F&quot;, &quot;K&quot;))),
+                list(&quot;F&quot;, &quot;G&quot;, &quot;K&quot;));
+        
+        /* Tests for Competitor1.powerRanking */
+        
+        tests.addTestCase(&quot;C has higher non-losing percentage than A&quot;,
+                () -&gt; competitor(&quot;X&quot;).powerRanking(list(</B></FONT>
+                        defeated(&quot;B&quot;, &quot;C&quot;),
+                        defeated(&quot;C&quot;, &quot;B&quot;),
+                        tie(&quot;A&quot;, &quot;B&quot;),
+                        tie(&quot;A&quot;, &quot;C&quot;),
+                        defeated(&quot;C&quot;, &quot;A&quot;))),
+                list(&quot;C&quot;, &quot;A&quot;, &quot;B&quot;));
+        
+        tests.addTestCase(&quot;powerRanking - multiple cycles (defeats+ties)&quot;,
+                () -&gt; competitor(&quot;X&quot;).powerRanking(list(
+                        defeated(&quot;A&quot;, &quot;B&quot;),
+                        tie(&quot;B&quot;, &quot;C&quot;),
+                        tie(&quot;D&quot;, &quot;E&quot;),
+                        defeated(&quot;E&quot;, &quot;H&quot;),
+                        tie(&quot;F&quot;, &quot;I&quot;),
+                        defeated(&quot;H&quot;, &quot;L&quot;),
+                        defeated(&quot;I&quot;, &quot;M&quot;),
+                        tie(&quot;J&quot;, &quot;N&quot;),
+                        defeated(&quot;K&quot;, &quot;O&quot;),
+                        tie(&quot;L&quot;, &quot;P&quot;),
+                        defeated(&quot;M&quot;, &quot;K&quot;),
+                        tie(&quot;P&quot;, &quot;B&quot;),
+                        tie(&quot;C&quot;, &quot;E&quot;),
+                        tie(&quot;J&quot;, &quot;P&quot;))),
+                list(&quot;A&quot;, &quot;F&quot;, &quot;I&quot;, &quot;M&quot;, &quot;K&quot;, &quot;O&quot;, &quot;C&quot;, &quot;D&quot;,
+                        &quot;E&quot;, &quot;J&quot;, &quot;N&quot;, &quot;P&quot;, &quot;B&quot;, &quot;H&quot;, &quot;L&quot;));
+        
+        tests.addTestCase(&quot;E has the highest non-losing percentage&quot;,
+                () -&gt; competitor(&quot;X&quot;).powerRanking(list(
+                        tie(&quot;A&quot;, &quot;E&quot;),
+                        defeated(&quot;C&quot;, &quot;B&quot;),
+                        defeated(&quot;B&quot;, &quot;A&quot;),
+                        defeated(&quot;A&quot;, &quot;C&quot;),
+                        tie(&quot;B&quot;, &quot;C&quot;))),
+                list(&quot;E&quot;, &quot;A&quot;, &quot;B&quot;, &quot;C&quot;));
+        
+        tests.addTestCase(&quot;alphabetical order gets precedence&quot;,
+                () -&gt; competitor(&quot;X&quot;).powerRanking(list(
+                        defeated(&quot;C&quot;, &quot;E&quot;),
+                        defeated(&quot;D&quot;, &quot;C&quot;),
+                        tie(&quot;D&quot;, &quot;B&quot;))),
+                list(&quot;B&quot;, &quot;D&quot;, &quot;C&quot;, &quot;E&quot;));
+        
+        tests.addTestCase(&quot;powerRanking - multiple cycles (defeats only)&quot;,
+                () -&gt; competitor(&quot;X&quot;).powerRanking(list(
+                        defeated(&quot;A&quot;, &quot;B&quot;),
+                        defeated(&quot;B&quot;, &quot;C&quot;),
+                        defeated(&quot;C&quot;, &quot;D&quot;),
+                        defeated(&quot;D&quot;, &quot;E&quot;),
+                        defeated(&quot;E&quot;, &quot;H&quot;),
+                        defeated(&quot;F&quot;, &quot;I&quot;),
+                        defeated(&quot;I&quot;, &quot;M&quot;),
+                        defeated(&quot;M&quot;, &quot;K&quot;),
+                        defeated(&quot;N&quot;, &quot;L&quot;),
+                        defeated(&quot;O&quot;, &quot;A&quot;),
+                        defeated(&quot;P&quot;, &quot;B&quot;),
+                        tie(&quot;C&quot;, &quot;E&quot;))),
+                list(&quot;O&quot;, &quot;P&quot;, &quot;F&quot;, &quot;N&quot;, &quot;A&quot;, &quot;I&quot;, &quot;L&quot;, &quot;M&quot;, &quot;B&quot;,
+                        &quot;K&quot;, &quot;C&quot;, &quot;E&quot;, &quot;D&quot;, &quot;H&quot;));
+
+        tests.runTests();
+    }
+    
+    /**
+     * Here we use our own implementation of Outcome to make sure students
+     * code to the interface, not the implementation.
+     */
+    private static class MockOutcome implements Outcome {
+        
+        MockOutcome(boolean tie, Competitor first, Competitor second) {
+            this.tie = tie;
+            this.winner = first;
+            this.loser = second;
+        }
+
+        @Override
+        public boolean isTie() {
+            return tie;
+        }
+
+        @Override
+        public Competitor first() {
+            return loser;
+        }
+
+        @Override
+        public Competitor second() {
+            return winner;
+        }
+
+        @Override
+        public Competitor winner() {
+            return winner;
+        }
+
+        @Override
+        public Competitor loser() {
+            return loser;
+        }
+        
+        private boolean tie;
+        private Competitor winner;
+        private Competitor loser;
+    }
+    
+    private static Outcome tie(String c1, String c2) {
+        return new MockOutcome(true, competitor(c1), competitor(c2));
+    }
+    
+    private static Outcome defeated(String c1, String c2) {
+        return new MockOutcome(false, competitor(c1), competitor(c2));
+    }
+    
+    @SafeVarargs
+    public static &lt;T&gt; List&lt;T&gt; list(T... a) {
+        return Arrays.asList(a);
+    }
+    
+    private static Competitor competitor(String c) {
+        if (!competitors.containsKey(c)) {
+            competitors.put(c, new Competitor1(c));
+        }
+        return competitors.get(c);
+    }
+
+    private static Map&lt;String, Competitor&gt; competitors = new HashMap&lt;&gt;();
+}
+</PRE>
+</BODY>
+</HTML>
